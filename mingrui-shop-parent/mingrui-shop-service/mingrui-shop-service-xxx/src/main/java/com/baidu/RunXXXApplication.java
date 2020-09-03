@@ -2,21 +2,23 @@ package com.baidu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import tk.mybatis.spring.annotation.MapperScan;
 
 /**
- * @ClassName RunEurekaServerApplication
+ * @ClassName RunXXXApplication
  * @Description: TODO
  * @Author wangzehui
  * @Date 2020/8/27
  * @Version V1.0
  **/
 @SpringBootApplication
-@EnableEurekaServer
-public class RunEurekaServerApplication {
+@EnableEurekaClient
+@MapperScan("com.baidu.shop.mapper")
+public class RunXXXApplication {
 
     public static void main(String[] args) {
-        System.out.println("111");
-        SpringApplication.run(RunEurekaServerApplication.class);
+        SpringApplication.run(RunXXXApplication.class);
     }
+
 }

@@ -12,5 +12,8 @@
     <artifactId>mingrui-shop-commoms</artifactId>
 
     <packaging>pom</packaging>
+    <modules>
+        <module>mingrui-shop-commom-core</module>
+    </modules>
 
 </project>
