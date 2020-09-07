@@ -72,6 +72,12 @@ public class SpecGroupServiceImpl extends BaseApiService implements SpecGroupSer
     @Override
     public Result<JSONObject> delete(Integer id) {
 
+        //构建条件查询 通过当前被删除的节点groupid查询数据
+        Example example = new Example(SpecParamEntity.class);
+        example.createCriteria().andEqualTo("groupId",id);
+        List<SpecParamEntity> list = specParamMapper.selectByExample(example);
+
+        if(list.size() > 0) return  this.setResultError("当前规格组中有规格参数,不能被删除");
         specGroupMapper.deleteByPrimaryKey(id);
 
         return this.setResultSuccess();
