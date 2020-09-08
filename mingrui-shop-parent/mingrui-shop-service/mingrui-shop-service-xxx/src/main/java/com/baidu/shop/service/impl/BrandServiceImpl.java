@@ -45,15 +45,22 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
     public Result<PageInfo<BrandEntity>> getPageInfo(BrandDTO brandDTO) {
 
         //分页
-        PageHelper.startPage(brandDTO.getPage(),brandDTO.getRows());
+        if(ObjectUtil.isNotNull(brandDTO.getPage()) && ObjectUtil.isNotNull(brandDTO.getRows()))
+            PageHelper.startPage(brandDTO.getPage(),brandDTO.getRows());
 
-        //排序
+        //构建条件查询
         Example example = new Example(BrandEntity.class);
 
-        if(!StringUtils.isEmpty(brandDTO.getOrder()))example.setOrderByClause(brandDTO.getOrderByClause());
+        //排序
+        if(!StringUtils.isEmpty(brandDTO.getOrder()))
+            example.setOrderByClause(brandDTO.getOrderByClause());
+
+        Example.Criteria criteria = example.createCriteria();
+        if (ObjectUtil.isNotNull(brandDTO.getId()))
+            criteria.andEqualTo("id",brandDTO.getId());
 
         //模糊查询
-        if(ObjectUtil.isNotEmpty(brandDTO.getName()))example.createCriteria()
+        if(ObjectUtil.isNotEmpty(brandDTO.getName()))criteria
             .andLike("name","%"+ brandDTO.getName() + "%");
 
 
@@ -64,6 +71,14 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
 
         return this.setResultSuccess(pageInfo);
     }
+
+    @Override
+    public Result<List<BrandEntity>> getBrandByCate(Integer cid) {
+
+        List<BrandEntity> list = brandMapper.getBrandByCateId(cid);
+        return null;
+    }
+
 
     @Transactional
     @Override
