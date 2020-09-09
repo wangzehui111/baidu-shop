@@ -72,11 +72,13 @@ public class BrandServiceImpl extends BaseApiService implements BrandService {
         return this.setResultSuccess(pageInfo);
     }
 
+    @Transactional
     @Override
     public Result<List<BrandEntity>> getBrandByCate(Integer cid) {
 
         List<BrandEntity> list = brandMapper.getBrandByCateId(cid);
-        return null;
+
+        return this.setResultSuccess(list);
     }
 
 

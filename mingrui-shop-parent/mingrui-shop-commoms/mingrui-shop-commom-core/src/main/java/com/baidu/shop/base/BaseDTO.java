@@ -28,7 +28,6 @@ public class BaseDTO {
     @ApiModelProperty(value = "是否降序")
     private String order;
 
-
     @ApiModelProperty(hidden = true)
     public String getOrderByClause(){
 
