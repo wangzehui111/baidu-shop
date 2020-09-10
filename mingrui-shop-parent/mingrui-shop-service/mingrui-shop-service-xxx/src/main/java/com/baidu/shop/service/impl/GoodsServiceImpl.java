@@ -173,8 +173,52 @@ public class GoodsServiceImpl extends BaseApiService  implements GoodsService {
         spuDetailMapper.updateByPrimaryKeySelective(BaiduBeanUtil
                 .copyProperties(spuDTO.getSpuDetail(),SpuDetailEntity.class));
         //修改skus
+        this.delSkusAndStocks(spuDTO.getId());
+        //新增 sku and stock数据
+        this.addSkusAndStocks(spuDTO.getSkus(),spuDTO.getId(),date);
+
+        //修改stock
+        return this.setResultSuccess();
+    }
+
+    //删除
+    @Transactional
+    @Override
+    public Result<JSONObject> delGoods(Integer spuId) {
+
+        //删除spu
+        spuMapper.deleteByPrimaryKey(spuId);
+        //删除spuDetail
+        spuDetailMapper.deleteByPrimaryKey(spuId);
+
+        //删除sku and stock
+        this.delSkusAndStocks(spuId);
+
+        return this.setResultSuccess();
+    }
+
+    @Transactional
+    @Override
+    public Result<JSONObject> getSaleable(SpuDTO spuDTO) {
+
+        SpuEntity spuEntity = BaiduBeanUtil.copyProperties(spuDTO, SpuEntity.class);
+        spuEntity.setId(spuDTO.getId());
+        if (spuEntity.getSaleable() == 1){
+            spuEntity.setSaleable(0);
+            spuMapper.updateByPrimaryKeySelective(spuEntity);
+            return this.setResultSuccess("下架成功");
+        }else{
+            spuEntity.setSaleable(1);
+            spuMapper.updateByPrimaryKeySelective(spuEntity);
+            return this.setResultSuccess("上架成功");
+        }
+    }
+
+    //提取的删除skus和stock操作
+    private void delSkusAndStocks(Integer spuId){
+
         Example example = new Example(SkuEntity.class);
-        example.createCriteria().andEqualTo("spuId",spuDTO.getId());
+        example.createCriteria().andEqualTo("spuId",spuId);
         //先通过spuid 查询要删除的sku
         List<Long> skuIdList = skuMapper.selectByExample(example)
                 .stream()
@@ -185,14 +229,9 @@ public class GoodsServiceImpl extends BaseApiService  implements GoodsService {
 
         //通过skuIdList删除stock
         stockMapper.deleteByIdList(skuIdList);
-
-        //新增 sku and stock数据
-        this.addSkusAndStocks(spuDTO.getSkus(),spuDTO.getId(),date);
-
-        //修改stock
-        return this.setResultSuccess();
     }
 
+    //提取的新增 skus 和 stocks操作
     private void addSkusAndStocks(List<SkuDTO> skus,Integer spuId,Date date){
 
         skus.stream().forEach(skuDTO -> {

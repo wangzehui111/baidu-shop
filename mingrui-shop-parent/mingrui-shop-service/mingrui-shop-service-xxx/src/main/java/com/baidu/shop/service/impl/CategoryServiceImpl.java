@@ -107,7 +107,7 @@ public class CategoryServiceImpl extends BaseApiService implements CategoryServi
         example2.createCriteria().andEqualTo("cid",id);
         List<SpecParamEntity> list2 = specParamMapper.selectByExample(example2);
 
-        if (list2.size() >= 1) return this.setResultError("当前根类绑定了规格,不能删除");
+        if (list2.size() >= 1) return this.setResultError("当前分类绑定了规格,不能删除");
 
         //构建条件查询 通过当前被删除节点的parentid查询数据
         Example example = new Example(CategoryEntity.class);

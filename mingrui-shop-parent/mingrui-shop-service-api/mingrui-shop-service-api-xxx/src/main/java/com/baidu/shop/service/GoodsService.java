@@ -7,10 +7,7 @@ import com.baidu.shop.dto.SpuDTO;
 import com.baidu.shop.entity.SpuDetailEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +41,14 @@ public interface GoodsService {
     @ApiOperation(value = "修改商品")
     @PutMapping(value = "goods/add")
     Result<JSONObject> editGoods(@RequestBody SpuDTO spuDTO);
+
+    @ApiOperation(value = "删除商品" )
+    @DeleteMapping(value = "goods/delGoods")
+    Result<JSONObject> delGoods(Integer spuId);
+
+    @ApiOperation(value = "商品上下架")
+    @GetMapping(value = "goods/getSaleable")
+    Result<JSONObject> getSaleable(SpuDTO spuDTO);
 
 }
 
